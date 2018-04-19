@@ -1,0 +1,41 @@
+= A simple Wildfly client for gs-rest-service
+
+:uri_rest-service-example: https://spring.io/guides/gs/rest-service/
+:rest-service-example: {uri_rest-service-example}[rest-service example]
+
+A simple Wildfly client for Spring Boot {rest-service-example}.
+
+== Steps
+
+Download, install and run Wildfly.
+
+Download and run `rest-service-example`:
+
+[source=bash,subs="attributes"]
+----
+git clone {uri_rest-service-example}
+cd complete
+d=crc/main/resources
+mkdir -p $d && echo 'server.port=8081' > $d/application.properties
+./gradlew bootJar
+java -jar build/libs/gs-rest-service-0.1.0.jar
+----
+
+Deploy this project on Wildfy:
+
+----
+mvn wildfly:deploy
+----
+
+Point your browser to http://localhost:8080/gs-rest-service-client. You can also pass the following parameters to this URL:
+
+* `protocol`: can be `http` or `https`.
+* `host`: the host that executes an instance of `rest-service-example`.
+* `port`: port that an instance of `rest-service-example` is listening.
+* `name`: the `name` parameter that could be specified when calling an instance of `rest-service-example`.
+
+== Useful references
+
+* https://spring.io/guides/gs/consuming-rest/
+* https://github.com/wildfly/quickstart/tree/master/servlet-security
+* http://docs.jboss.org/wildfly/plugins/maven/latest/
