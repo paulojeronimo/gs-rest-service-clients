@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+[ -d target ] || exit 1
+libs=$(find target/gs-rest-service-client-0.0.1-SNAPSHOT/WEB-INF/lib -type f | xargs | tr ' ' :)
+java -cp $libs:target/classes com.paulojeronimo.gs_rest_service.Client

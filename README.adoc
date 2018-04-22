@@ -1,19 +1,19 @@
 = A simple Wildfly client for gs-rest-service
 
-:uri_rest-service-example: https://spring.io/guides/gs/rest-service/
-:rest-service-example: {uri_rest-service-example}[rest-service example]
+:uri_gs-rest-service: https://github.com/spring-guides/gs-rest-service
+:gs-rest-service: {uri_gs-rest-service}[gs-rest-service]
 
-A simple Wildfly client for Spring Boot {rest-service-example}.
+A simple Wildfly client for Spring Boot {gs-rest-service} example.
 
 == Steps
 
 Download, install and run Wildfly.
 
-Download and run `rest-service-example`:
+Download and run {gs-rest-service}:
 
 [source=bash,subs="attributes"]
 ----
-git clone {uri_rest-service-example}
+git clone {uri_gs-rest-service}
 cd complete
 d=crc/main/resources
 mkdir -p $d && echo 'server.port=8081' > $d/application.properties
@@ -30,9 +30,24 @@ mvn wildfly:deploy
 Point your browser to http://localhost:8080/gs-rest-service-client. You can also pass the following parameters to this URL:
 
 * `protocol`: can be `http` or `https`.
-* `host`: the host that executes an instance of `rest-service-example`.
-* `port`: port that an instance of `rest-service-example` is listening.
-* `name`: the `name` parameter that could be specified when calling an instance of `rest-service-example`.
+* `host`: the host that executes an instance of `gs-rest-service`.
+* `port`: port that an instance of `gs-rest-service` is listening.
+* `name`: the `name` parameter that could be specified when calling an instance of `gs-rest-service`.
+
+== Configure Wildfly to access a microservice via HTTPS
+
+Try to access a microservice configured to use HTTPS without configuring Wildfly. For example, when we point our browser to the following URL:
+
+http://localhost:8080/gs-rest-service-client/?protocol=https&host=gs-rest-service.paulojeronimo.com&port=443
+
+We will see the following result:
+
+----
+Can't access "https://gs-rest-service.paulojeronimo.com:443/greeting". Error:
+I/O error on GET request for "https://gs-rest-service.paulojeronimo.com:443/greeting": sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target; nested exception is javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+----
+
+Let´s do the needed configurations to solve this problem ... (to be documented).
 
 == Useful references
 

@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set +x
+set -e
+
+BASE_DIR=`cd "$(dirname "$0")";pwd`
+cd "$BASE_DIR"
+
+config=config
+[ -f "$config" ] || config=$config.sample
+source "$config"
+
+_download() {
+  local dir=$(dirname "$wildfly_installer")
+  local file=$(basename "$wildfly_installer")
+
+  echo "Downloading \"$file\" into \"$dir\""
+  mkdir -p "$dir"
+  pushd "$dir" &> /dev/null
+  wget -c "$wildfly_download_url" &> /dev/null
+  popd &> /dev/null
+}
+
+_install() {
+  local dir=$(dirname "$wildfly_dir")
+
+  [ -r "$wildfly_installer" ] || _download
+
+  echo "Removing \"$wildfly_dir\" (if exists)"
+  rm -rf "$wildfly_dir"
+
+  echo "Extracting \"$wildfly_installer\" into \"$dir\""
+  tar xfz "$wildfly_installer" -C "$dir"
+}
+
+op="$1"
+if type _$op &> /dev/null
+then
+  echo "Current dir is \"$BASE_DIR\""
+  _$op
+else
+  echo "Usage: $0 [download|install]"
+fi
