@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set +x
+set -e
+
+BASE_DIR=`cd "$(dirname "$0")";pwd`
+cd "$BASE_DIR"/..
+
+_start() {
+  local app_dir=gs-rest-service/complete
+  [ -d gs-rest-service ] || git clone https://github.com/spring-guides/gs-rest-service
+  pushd $app_dir &> /dev/null
+  local bin=build/libs/gs-rest-service-0.1.0.jar
+  if ! [ -f $bin ]
+  then
+    d=src/main/resources
+    mkdir -p $d && echo 'server.port=8081' > $d/application.properties
+    ./gradlew bootJar
+  fi
+  popd &> /dev/null
+  echo "Starting gs-rest-service in background. See the logs in gs-rest-service.log"
+  java -jar $app_dir/$bin &> gs-rest-service.log &
+}
+
+op="$1"
+if type _$op &> /dev/null
+then
+  echo "Current dir is \"$PWD\""
+  _$op
+else
+  echo "Usage: $0 [download|install|start]"
+fi

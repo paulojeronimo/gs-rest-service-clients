@@ -5,3 +5,5 @@ backups_dir=../backups
 wildfly_download_url=http://download.jboss.org/wildfly/8.2.1.Final/wildfly-8.2.1.Final.tar.gz
 wildfly_dir=../wildfly-8.2.1.Final
 wildfly_installer=$backups_dir/wildfly-8.2.1.Final.tar.gz
+
+gs_rest_service_url=https://github.com/spring-guides/gs-rest-service

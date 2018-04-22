@@ -1,24 +1,22 @@
-= A simple Wildfly client for gs-rest-service
+= Clients for gs-rest-service
 
 :uri_gs-rest-service: https://github.com/spring-guides/gs-rest-service
 :gs-rest-service: {uri_gs-rest-service}[gs-rest-service]
 
-A simple Wildfly client for Spring Boot {gs-rest-service} example.
+Simple clients for Spring Boot {gs-rest-service} example.
 
-== Steps
+== Build and deploy
 
-Download, install and run Wildfly.
+Download, install and run Wildfly by typing the following commands:
 
-Download and run {gs-rest-service}:
-
-[source=bash,subs="attributes"]
 ----
-git clone {uri_gs-rest-service}
-cd complete
-d=crc/main/resources
-mkdir -p $d && echo 'server.port=8081' > $d/application.properties
-./gradlew bootJar
-java -jar build/libs/gs-rest-service-0.1.0.jar
+./scripts/wildfly start
+----
+
+Download and run {gs-rest-service} by typing the following commands:
+
+----
+./scripts/gs-rest-service start
 ----
 
 Deploy this project on Wildfy:
@@ -27,12 +25,48 @@ Deploy this project on Wildfy:
 mvn wildfly:deploy
 ----
 
+== Test
+
+=== Using your browser (Wildfly client)
+
+In this case the request will go from Wildfy to gs-rest-service running in some location.
+
 Point your browser to http://localhost:8080/gs-rest-service-client. You can also pass the following parameters to this URL:
 
 * `protocol`: can be `http` or `https`.
 * `host`: the host that executes an instance of `gs-rest-service`.
 * `port`: port that an instance of `gs-rest-service` is listening.
 * `name`: the `name` parameter that could be specified when calling an instance of `gs-rest-service`.
+
+Some samples:
+
+* http://localhost:8080/gs-rest-service-client/?name=Paulo
+* http://localhost:8080/gs-rest-service-client/?protocol=https&host=localhost&port=8443
+* http://localhost:8080/gs-rest-service-client/?protocol=https&host=gs-rest-service.paulojeronimo.com&port=443
+
+=== Using your command line (Bash client)
+
+In this case the request will go from a Java application (Client.java) to gs-rest-service running in some location.
+
+Use link:script/client[] like in this samples:
+
+----
+$ ./scripts/client
+Hello, World! (1)
+
+$ ./scripts/client http://localhost:8081/greeting
+TODO: parse an URL must be implemented. Calling with default parameters ...
+Hello, World! (2)
+
+$ ./scripts/client http localhost 8081 ''
+Hello, World! (3)
+
+$ ./scripts/client https localhost 8443 ''
+Can't access "https://localhost:8443/greeting". Error:
+I/O error on GET request for "https://localhost:8443/greeting": Connection refused (Connection refused); nested exception is java.net.ConnectException: Connection refused (Connection refused)
+----
+
+NOTE: You must specify 0, 1 or 4 parameters. If a parameter is null you need to specify a empty string.
 
 == Configure Wildfly to access a microservice via HTTPS
 

@@ -30,6 +30,20 @@ _install() {
 
   echo "Extracting \"$wildfly_installer\" into \"$dir\""
   tar xfz "$wildfly_installer" -C "$dir"
+
+  echo "Creating link wildfly to \"$dir\""
+  pushd "$dir" &> /dev/null
+  ln -s "$(basename "$wildfly_dir")" wildfly
+  popd &> /dev/null
+}
+
+_start() {
+  local bin=../wildfly/bin/standalone.sh
+
+  [ -r "$bin" ] || _install
+
+  echo "Starting wildfly in background. See the logs in wildfly.log"
+  $bin &> ../wildfly.log &
 }
 
 op="$1"
@@ -38,5 +52,5 @@ then
   echo "Current dir is \"$BASE_DIR\""
   _$op
 else
-  echo "Usage: $0 [download|install]"
+  echo "Usage: $0 [download|install|start]"
 fi
